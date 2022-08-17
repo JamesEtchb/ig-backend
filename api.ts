@@ -1,19 +1,12 @@
-import express, { Request, Response } from 'express'
+import express from 'express'
 import cors from 'cors'
-import { MongoClient } from 'mongodb'
-import { uri } from './credentials'
+import { photoRouter } from './src/routers/photo-router'
 
-const client = new MongoClient(uri)
-const db = client.db('JamesCluster')
-const photosCollection = db.collection('photos')
 const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.get('/', async (req: Request, res: Response) => {
-  const photos = await photosCollection.find({}).toArray()
-  res.status(200).json(photos)
-})
+app.use('/photos', photoRouter)
 
 const PORT = 3030
 app.listen(PORT, () => {
